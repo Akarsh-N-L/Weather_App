@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
         iconIV = findViewById(R.id.idIVIcon);
         searchIV = findViewById(R.id.idIVSearch);
         homeRL = findViewById(R.id.idRLHome);
-        weatherRV = findViewById(R.id.idRVWeather);
-
 
     }
 }
