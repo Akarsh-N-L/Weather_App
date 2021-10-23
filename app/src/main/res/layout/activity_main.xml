@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/idRLHome"
-        android:visibility="gone"
+        android:visibility="invisible"
         >
 
         <ImageView
@@ -140,6 +140,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
+            android:background="@null"
             android:id="@+id/idRVWeather"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             />

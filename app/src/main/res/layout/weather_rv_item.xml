@@ -5,16 +5,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="center"
     android:layout_margin="4dp"
+    android:background="@null"
     app:cardElevation="6dp"
     app:cardCornerRadius="10dp"
-    android:background="@android:color/transparent"
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/cardback"
-        >
+                >
 
         <TextView
             android:layout_width="match_parent"
@@ -24,11 +24,13 @@
             android:padding="4dp"
             android:text="time"
             android:textColor="@color/white"
+            android:background="@null"
             android:textAlignment="center" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@null"
             android:id="@+id/idTVTemprature"
             android:gravity="center"
             android:text="20"
@@ -40,6 +42,7 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:background="@null"
             android:layout_below="@id/idTVTemprature"
             android:id="@+id/idIVCondition"
             android:layout_centerHorizontal="true"
@@ -59,6 +62,7 @@
             android:padding="3dp"
             android:layout_margin="4dp"
             android:text="10"
+            android:background="@null"
             />
 
     </RelativeLayout>

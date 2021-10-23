@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -54,18 +55,11 @@ public class MainActivity extends AppCompatActivity {
     private int PERMISSION_CODE = 1;
     private String cityName;
     private TextInputEditText cityEdt;
-    private FusedLocationProviderClient fusedLocationProviderClient;
-
-    static double longitude = 0.0;
-    static double latitude = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //to get the full screen
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         //Initializing all the objects
         loadingPB = findViewById(R.id.idPBLoading);
@@ -77,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         searchIV = findViewById(R.id.idIVSearch);
         homeRL = findViewById(R.id.idRLHome);
         weatherRV = findViewById(R.id.idRVWeather);
-
+         cityEdt=findViewById(R.id.idEdtCity);
         //Setting array adapter to the recycle view
         weatherRVAdapterArrayList = new ArrayList<>();
         weatherRVAdapter = new WeatherRVAdapter(this,weatherRVAdapterArrayList);
@@ -93,16 +87,17 @@ public class MainActivity extends AppCompatActivity {
 
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         cityName = getCityName(location.getLongitude(),location.getLatitude());
+        if (cityName == null) cityName = "Bengaluru";
         getWeatherInfo(cityName);
 
         searchIV.setOnClickListener(v -> {
             String city = cityEdt.getText().toString();
             if(city.isEmpty()){
                 Toast.makeText(MainActivity.this, "Please Enter A City Name", Toast.LENGTH_SHORT).show();
-            }else {
-                cityNameTV.setText(cityName);
-                getWeatherInfo(city);
+                city = null;
             }
+            cityNameTV.setText(cityName);
+            getWeatherInfo(city);
         });
     }
 
@@ -121,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Returns a city name if both longitude and latitude are provided
     private String getCityName(double longitude, double latitude){
-        String cityName = "Not Found";
+        String cityName = null;
         Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
         try {
             List<Address> addresses = gcd.getFromLocation(latitude,longitude,10);
@@ -131,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                     if (city != null && !city.equals("")) cityName=city;
                     else {
                         Log.d("TAG","City Not Found!!");
-                        Toast.makeText(this, "User City Not Found!", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(this, "User City Not Found!", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -143,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Here the API is called by the city name and all the weather details are loaded into the app
     private void getWeatherInfo(String cityName){
-        String url = "http://api.weatherapi.com/v1/forecast.json?key=5ec313f52940406d9eb83610211410&q="+cityName+"&days=1&aqi=yes&alerts=yes";
+        String url = "https://api.weatherapi.com/v1/forecast.json?key=5ec313f52940406d9eb83610211410&q=+"+cityName+"&days=1&aqi=yes&alerts=yes";
         cityNameTV.setText(cityName);
         RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
@@ -165,9 +160,9 @@ public class MainActivity extends AppCompatActivity {
                 }else {
                     Picasso.get().load("https://images.unsplash.com/photo-1536746803623-cef87080bfc8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=385&q=80").into(backIV);
                 }
-
+              //  JSONObject responset = response.getJSONObject("forecast");
                 JSONObject forecastObj = response.getJSONObject("forecast");
-                JSONObject forecastO = response.getJSONArray("forecastday").getJSONObject(0);
+                JSONObject forecastO = forecastObj.getJSONArray("forecastday").getJSONObject(0);
                 JSONArray hourArray = forecastO.getJSONArray("hour");
                 for(int i=0;i<hourArray.length();i++){
                     JSONObject hourObj = hourArray.getJSONObject(i);
